@@ -1,0 +1,47 @@
+#!/usr/bin/env sh
+set -e 
+
+: ${AWS_INSTANCE_SIZE:?"You must specify AWS_INSTANCE_SIZE"}
+: ${AWS_SECURITY_GROUP_ID:?"You must specify AWS_SECURITY_GROUP_ID"}
+: ${AWS_SUBNET_ID:?"You must specify AWS_SUBNET_ID"}
+: ${AWS_KEY_NAME:?"You must specify AWS_KEY_NAME"}
+: ${BUILT_AMI:?"You must specify BUILT_AMI, run generate_ami to build"}
+
+OUT=$(mktemp /tmp/output.XXXXXXXXXX) || \
+  { echo "Failed to create temp file"; exit 1; }
+
+AMAZON_RESPONSE=$(aws ec2 run-instances \
+  --image-id ${BUILT_AMI} \
+  --count 1 \
+  --instance-type ${AWS_INSTANCE_SIZE} \
+  --key-name ${AWS_KEY_NAME} \
+  --security-group-ids ${AWS_SECURITY_GROUP_IDS} \
+  --subnet-id ${AWS_SUBNET_ID} \
+  --output json \
+  > ${OUT})
+
+INSTANCE_ID=$(cat $OUT | json 'Instances[0].InstanceId')
+echo "Launching built ami ${BUILT_AMI} as instance ${INSTANCE_ID}"
+
+aws ec2 create-tags \
+  --resources ${INSTANCE_ID} \
+  --tags Key=Name,Value=iHat
+
+PUBLIC_DNS='null'
+while [[ "${PUBLIC_DNS}" == 'null' ]]
+do
+  PUBLIC_DNS=$(aws ec2 describe-instances \
+    --instance-ids ${INSTANCE_ID} \
+    --output json | \
+    json 'Reservations[0].Instances[0].PublicDnsName')
+  if [[ "${PUBLIC_DNS}" == 'null' ]]
+  then
+    printf '.'
+    sleep 3
+  else
+    printf "\nYour server is running at http://${PUBLIC_DNS}\n"
+  fi
+done
+
+echo "You can now log in with:"
+echo "ssh -i ${HOME}/.ssh/ihat.pem -l ubuntu ${PUBLIC_DNS}"

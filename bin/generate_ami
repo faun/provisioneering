@@ -1,0 +1,33 @@
+#!/usr/bin/env sh
+set -e
+
+: ${AWS_ACCESS_KEY_ID:?"You must specify AWS_ACCESS_KEY_ID"}
+: ${AWS_SECRET_ACCESS_KEY:?"You must specify AWS_SECRET_ACCESS_KEY"}
+: ${AWS_SECURITY_GROUP_ID:?"You must specify AWS_SECURITY_GROUP_ID"}
+: ${IHAT_ENVIRONMENT:?"You must specify IHAT_ENVIRONMENT"}
+: ${AWS_INSTANCE_SIZE:?"You must specify AWS_INSTANCE_SIZE"}
+
+LOGFILE="build.log"
+OUT=$(mktemp /tmp/output.XXXXXXXXXX) || \
+  { echo "Failed to create temp file"; exit 1; }
+UUID=$(uuid -v4)
+
+PACKER_RESULT=$(packer build \
+  -var aws_access_key=${AWS_ACCESS_KEY_ID} \
+  -var aws_secret_key=${AWS_SECRET_ACCESS_KEY} \
+  -var environment=${IHAT_ENVIRONMENT} \
+  -var security_group_id=${AWS_SECURITY_GROUP_ID} \
+  -var aws_instance_size=${AWS_INSTANCE_SIZE} \
+  -var build_uuid=${UUID} \
+  aws.json > "${LOGFILE}" && echo 0 || echo $?)
+
+if [ $PACKER_RESULT != 0 ]
+then
+  >&2 echo "Build failed. Please inspect ${LOGFILE} for errors"
+  exit 1
+fi
+
+AWS_DESCRIBE=$(aws ec2 describe-images --filters Name=tag:BuildUUID,Values=${UUID})
+BUILT_AMI=$(echo $AWS_DESCRIBE | json 'Images[0].ImageId')
+
+printf "${BUILT_AMI}"
