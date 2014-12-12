@@ -1,0 +1,12 @@
+#! /usr/bin/env sh
+set -e
+
+if ! which aws &> /dev/null
+then
+  sudo pip install awscli
+fi
+
+if ! which json &> /dev/null
+then
+  npm -g install json
+fi
