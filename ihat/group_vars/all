@@ -1,3 +1,29 @@
 ---
 # Variables listed here are applicable to all host groups
+postgresql_version: 9.3
+postgresql_encoding: 'UTF-8'
+postgresql_locale: 'en_US.UTF-8'
 
+postgresql_admin_user: "postgres"
+postgresql_default_auth_method: "trust"
+
+postgresql_cluster_name: "main"
+postgresql_cluster_reset: false
+
+# List of databases to be created (optional)
+postgresql_databases:
+  - name: "ihat"
+    hstore: no         # flag to install the hstore extension on this database (yes/no)
+    uuid_ossp: no      # flag to install the uuid-ossp extension on this database (yes/no)
+
+# List of users to be created (optional)
+postgresql_users:
+  - name: ihat
+    pass:
+    encrypted: no       # denotes if the password is already encrypted.
+
+# List of user privileges to be applied (optional)
+postgresql_user_privileges:
+  - name: ihat          # user name
+    db: "ihat"         # database
+    priv: "ALL"        # privilege string format: example: INSERT,UPDATE/table:SELECT/anothertable:ALL
