@@ -1,0 +1,4 @@
+# For a list of defaults, see:
+# https://github.com/debops/ansible-sshd/blob/master/defaults/main.yml
+sshd_unlimited_access: 'true'
+sshd_AllowGroups: 'root admins sshusers sftponly ubuntu'

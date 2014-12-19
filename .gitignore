@@ -1,1 +1,8 @@
 build.log
+ansible/secret
+secret
+.encfs.secret
+ansible.cfg
+
+#-- sftp configuration file
+sftp-config.json

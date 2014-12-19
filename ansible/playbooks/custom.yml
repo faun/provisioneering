@@ -1,0 +1,8 @@
+---
+
+- name: Deploy ihat
+  hosts: debops_rails
+  sudo: true
+
+  roles:
+    - { role: debops.rails_deploy, tags: ihat-staging }
