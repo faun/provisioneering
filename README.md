@@ -7,7 +7,7 @@ A minimal set of scripts to generate an AWS AMI and provision an EC2 instance fr
 ### Prerequisites:
 
 - [Node](http://nodejs.org/download/) for parsing json
-- [Pip](https://pip.pypa.io/en/latest/installing.html) for installing awscli. Alternate installaton instructions [here](http://docs.aws.amazon.com/cli/latest/userguide/installing.html)
+- [Pip](https://pip.pypa.io/en/latest/installing.html) for installing awscli. Alternate installation instructions [here](http://docs.aws.amazon.com/cli/latest/userguide/installing.html)
 
 
 Configure AWS CLI
