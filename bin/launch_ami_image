@@ -28,12 +28,17 @@ aws ec2 create-tags \
   --tags Key=Name,Value=iHat
 
 PUBLIC_DNS='null'
+IP_ADDRESS=''
 while [[ "${PUBLIC_DNS}" == 'null' ]]
 do
   PUBLIC_DNS=$(aws ec2 describe-instances \
     --instance-ids ${INSTANCE_ID} \
     --output json | \
     json 'Reservations[0].Instances[0].PublicDnsName')
+  IP_ADDRESS=$(aws ec2 describe-instances \
+    --instance-ids ${INSTANCE_ID} \
+    --output json | \
+    json 'Reservations[0].Instances[0].PublicIpAddress')
   if [[ "${PUBLIC_DNS}" == 'null' ]]
   then
     printf '.'
@@ -42,6 +47,12 @@ do
     printf "\nYour server is running at http://${PUBLIC_DNS}\n"
   fi
 done
+
+if [[ -n $SERVER_NAME ]]
+then
+  ssh-keygen -R $SERVER_NAME
+  sudo hostile set "${IP_ADDRESS}" $SERVER_NAME
+fi
 
 echo "You can now log in with:"
 echo "ssh -i ${HOME}/.ssh/ihat.pem -l ubuntu ${PUBLIC_DNS}"

@@ -10,3 +10,8 @@ if ! which json &> /dev/null
 then
   npm -g install json
 fi
+
+if ! which hostile &> /dev/null
+then
+  npm -g install hostile
+fi
