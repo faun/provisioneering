@@ -84,7 +84,7 @@ AWS_SUBNET_ID='subnet-13241234'
 AWS_VPC_ZONES='us-east-1a'
 
 # Tag for instance identification
-ENVIRONMENT='staging'
+RAILS_ENVIRONMENT='staging'
 
 # Base ami image (Ubuntu 14.04 in this case)
 AMI_ID='ami-f21b7d9a'
