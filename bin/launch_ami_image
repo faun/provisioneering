@@ -21,7 +21,7 @@ AMAZON_RESPONSE=$(aws ec2 run-instances \
   > ${OUT})
 
 INSTANCE_ID=$(cat $OUT | json 'Instances[0].InstanceId')
-echo "Launching built ami ${BUILT_AMI} as instance ${INSTANCE_ID}"
+echo "Launching ${BUILT_AMI} as ${INSTANCE_ID}"
 
 aws ec2 create-tags \
   --resources ${INSTANCE_ID} \
