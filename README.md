@@ -103,9 +103,26 @@ bin/launch_ami_image
 
 Enjoy your newly provisioned server with Docker and Fig pre-installed.
 
-
 # Provisioning with Ansible
 
+We are using the [debops](http://debops.org/) framework for provisioning servers.
+
+See the debops [documentation](http://docs.debops.org/en/latest/installation.html) for installation instructions.
+
+The tl;dr version:
+
+```
+sudo pip install debops
+debops-update
+```
+
+Store the password to the vault:
+
+```
+echo "[password redacted]" > ~/.vault_pass.txt
+```
+
+To run the debops playbooks with our custom playbooks, run:
 
 Run all of the playbooks:
 ```
@@ -116,5 +133,4 @@ Run all of the playbooks:
 Run only the playbooks tagged with rails\_deploy:
 ```
  debops custom -t rails_deploy --vault-password-file ~/.vault_pass.txt
-
 ```
