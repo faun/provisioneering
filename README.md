@@ -102,3 +102,19 @@ bin/launch_ami_image
 ```
 
 Enjoy your newly provisioned server with Docker and Fig pre-installed.
+
+
+# Provisioning with Ansible
+
+
+Run all of the playbooks:
+```
+ debops custom --vault-password-file ~/.vault_pass.txt
+```
+
+
+Run only the playbooks tagged with rails\_deploy:
+```
+ debops custom -t rails_deploy --vault-password-file ~/.vault_pass.txt
+
+```
