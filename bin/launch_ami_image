@@ -50,8 +50,12 @@ done
 
 if [[ -n $SERVER_NAME ]]
 then
-  ssh-keygen -R $SERVER_NAME
-  sudo hostile set "${IP_ADDRESS}" $SERVER_NAME
+  read -r -p "Update hostname for ${SERVER_NAME}? [y/N] " response
+  if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]
+  then
+    ssh-keygen -R $SERVER_NAME
+    sudo hostile set "${IP_ADDRESS}" $SERVER_NAME
+  fi
 fi
 
 echo "You can now log in with:"
