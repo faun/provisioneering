@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+debops custom --vault-password-file ~/.vault_pass.txt "$@"

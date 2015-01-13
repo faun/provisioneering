@@ -124,13 +124,11 @@ echo "[password redacted]" > ~/.vault_pass.txt
 
 To run the debops playbooks with our custom playbooks, run:
 
-Run all of the playbooks:
 ```
- debops custom --vault-password-file ~/.vault_pass.txt
+bin/provision
 ```
-
 
 Run only the playbooks tagged with rails\_deploy:
 ```
- debops custom -t rails_deploy --vault-password-file ~/.vault_pass.txt
+bin/provision -t rails_deploy 
 ```
