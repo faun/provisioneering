@@ -1,8 +1,19 @@
 ---
-
 - name: Deploy ihat
-  hosts: debops_rails
+  tags: ['rails_deploy']
+  hosts: all
   sudo: true
+  vars:
+    env:
+      REDIS_URL: "{{ redis_url }}"
+      SECRET_KEY_BASE: "{{ rails_secret_key_base }}"
+
+  pre_tasks:
+    - name: "Change permissions for application source"
+      tags: 'ihat-staging'
+      file: path={{ rails_deploy_src }} state=directory owner={{ rails_deploy_service }} recurse="yes"
 
   roles:
-    - { role: debops.rails_deploy, tags: ihat-staging }
+    - { role: joshualund.ruby-2_1, tags: ['ruby'] }
+    - { role: debops.pki, tags: ['debops'], sudo: true }
+    - { role: debops.rails_deploy, tags: ['rails_deploy'], sudo: true }
