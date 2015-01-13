@@ -93,7 +93,7 @@ AMI_ID='ami-f21b7d9a'
 Generate an AMI:
 
 ``` console
-BUILT_AMI=$(bin/generate_ami)
+BUILT_AMI=$(bin/generate_ami) || cat build.log
 ```
 
 Launch the resulting AMI as an EC2 instance
