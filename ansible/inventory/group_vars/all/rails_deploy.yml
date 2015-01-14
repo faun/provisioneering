@@ -32,7 +32,7 @@ rails_deploy_system_env: "{{ lookup('env', 'RAILS_ENVIRONMENT') }}"
 rails_deploy_worker_enabled: True
 rails_deploy_backend: 'puma'
 rails_deploy_backend_bind: '0.0.0.0:3000'
-rails_deploy_bundle_without: ['development', 'test']
+rails_deploy_bundle_without: ['development', 'test', 'performance', 'doc']
 rails_deploy_hosts_group: 'debops_rails'
 rails_deploy_postgresql_cluster: '9.3/main'
 rails_deploy_database_adapter: 'postgresql'
@@ -76,15 +76,6 @@ rails_deploy_default_env:
   RAILS_ENV: '{{ rails_deploy_system_env }}'
   SECRET_KEY_BASE: '{{ rails_secret_key_base }}'
   BUNDLE_GEMFILE: '{{ rails_deploy_src}}/Gemfile'
-
-  METYPESET_PATH: ''
-  S3_BUCKET: ''
-  S3_REGION: ''
-  OXGARAGE_URL: ''
-
-  # rake api:generate_access_token
-  TAHI_TOKEN: ''
-  BUGSNAG_API_KEY: ''
 
   DATABASE_URL: "{{ rails_deploy_database_adapter }}://{{ rails_deploy_service }}:{{ rails_deploy_database_user_password }}@{{ rails_deploy_database_host }}:{{ rails_deploy_database_port }}/{{ rails_deploy_service }}_{{ rails_deploy_system_env }}?pool={{ rails_deploy_database_pool }}&timeout={{ rails_deploy_database_timeout }}"
 

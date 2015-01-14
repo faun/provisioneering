@@ -11,7 +11,28 @@
   pre_tasks:
     - name: "Change permissions for application source"
       tags: 'ihat-staging'
-      file: path={{ rails_deploy_src }} state=directory owner={{ rails_deploy_service }} recurse="yes"
+      file: path={{ rails_deploy_src }}
+            state=directory
+            owner={{ rails_deploy_service }}
+            recurse="yes"
+    - name: Clone meTypeset repo
+      git: repo=https://github.com/MartinPaulEve/meTypeset.git
+           dest=/home/{{ rails_deploy_service }}/meTypeset
+    - name: Source app defaults file from /etc/profile
+      lineinfile: dest=/etc/profile 
+                  line='. /etc/default/'{{ rails_deploy_service }}
+
+  post_tasks:
+    - name: Restart app services
+      service: name={{ item }} state=restarted
+      with_items:
+        - "{{ rails_deploy_service }}"
+        - "{{ rails_deploy_worker }}"
+    - name: Wait for app to start
+      wait_for: port='{{item}}' delay='5' timeout='600'
+      with_items: 
+        - '443'
+
 
   roles:
     - { role: joshualund.ruby-2_1, tags: ['ruby'] }
