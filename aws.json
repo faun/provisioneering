@@ -2,8 +2,11 @@
   "variables": {
     "aws_access_key": "",
     "aws_secret_key": "",
+    "aws_source_ami": "",
     "environment": "",
     "security_group_id": "",
+    "subnet_id": "",
+    "vpc_id": "",
     "aws_instance_size": "",
     "build_uuid": ""
   },
@@ -11,13 +14,14 @@
     "type": "amazon-ebs",
     "access_key": "{{user `aws_access_key`}}",
     "secret_key": "{{user `aws_secret_key`}}",
+    "source_ami": "{{user `aws_source_ami`}}",
     "region": "us-east-1",
-    "source_ami": "ami-98aa1cf0",
     "instance_type": "{{user `aws_instance_size`}}",
     "ssh_username": "ubuntu",
-    "ami_name": "ihat-docker {{timestamp}}",
+    "ami_name": "ihat {{timestamp}}",
     "security_group_id": "{{user `security_group_id`}}",
-
+    "subnet_id": "{{user `subnet_id`}}",
+    "vpc_id": "{{user `vpc_id`}}",
     "tags": {
       "BuildUUID": "{{user `build_uuid`}}",
       "Name": "iHat",

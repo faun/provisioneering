@@ -1,0 +1,100 @@
+---
+# See http://docs.debops.org/en/latest/ansible/roles/debops.rails_deploy.html#high-level-goals
+# For explanation and more defaults.
+
+ferm: False
+
+ruby_version: "ruby-2.1.5"
+ruby_download_location: "http://cache.ruby-lang.org/pub/ruby/2.1/{{ ruby_version }}.tar.gz"
+
+postgresql_version: '9.3'
+postgresql_packages: ['postgresql-contrib-9.3']
+
+postgresql_default_cluster:
+  - name: 'main'
+    port: '5432'
+
+    listen_addresses: '0.0.0.0'
+    hba:
+      - address: '172.16.0.0/12'
+    allow:
+      # Make sure the firewall also allows your master app host access.
+      - '172.16.0.0/12'
+
+redis_url: "{{ redis_hosts_master }}"
+
+rails_deploy_database_user_role_attrs: "SUPERUSER"
+rails_deploy_dependencies: ['database', 'redis', 'monit']
+rails_deploy_git_location: 'git@github.com:Tahi-project/ihat.git'
+rails_deploy_git_access_token: "{{ lookup('env', 'RAILS_DEPLOY_GIT_ACCESS_TOKEN') }}"
+rails_deploy_git_version: "ansible"
+rails_deploy_system_env: "{{ lookup('env', 'RAILS_ENVIRONMENT') }}"
+rails_deploy_worker_enabled: True
+rails_deploy_backend: 'puma'
+rails_deploy_backend_bind: '0.0.0.0:3000'
+rails_deploy_bundle_without: ['development', 'test', 'performance', 'doc']
+rails_deploy_hosts_group: 'debops_rails'
+rails_deploy_postgresql_cluster: '9.3/main'
+rails_deploy_database_adapter: 'postgresql'
+rails_deploy_database_host: '{{ ansible_fqdn }}'
+
+# TODO: OxGarage goes here
+# They will get restarted/reloaded at the end of the deploy.
+# Everything is optional except for the name.
+# rails_deploy_extra_services: []
+
+#rails_deploy_extra_services:
+#  - name: ''
+#    changed_state: 'reloaded'
+#    state: 'started'
+#    enabled: True
+
+# Should the database be created by default?
+rails_deploy_database_create: True
+rails_deploy_database_prepare: True
+rails_deploy_database_migrate: True
+rails_deploy_pre_migrate_shell_commands: ['bundle install']
+
+# Defaults from debops.rails_deploy that we're including here, since we reference them in our tasks
+
+# What should the service be named?
+# The default value plucks out your repo name (without .git) from your location.
+rails_deploy_service: "{{ rails_deploy_git_location | basename | replace('.git', '') }}"
+
+# Where should the user's home directory be?
+rails_deploy_home: '/var/local/{{ rails_deploy_service }}'
+
+# Where should the git repository be cloned to?
+rails_deploy_src: '{{ rails_deploy_home }}/{{ rails_deploy_nginx_domains[0] }}/{{ rails_deploy_service }}/src'
+
+rails_deploy_nginx_server_enabled: True
+
+# What domain names should the app be associated to?
+rails_deploy_nginx_domains: ['{{ ansible_fqdn }}']
+
+rails_deploy_default_env:
+  RAILS_ENV: '{{ rails_deploy_system_env }}'
+  SECRET_KEY_BASE: '{{ rails_secret_key_base }}'
+  BUNDLE_GEMFILE: '{{ rails_deploy_src}}/Gemfile'
+
+  DATABASE_URL: "{{ rails_deploy_database_adapter }}://{{ rails_deploy_service }}:{{ rails_deploy_database_user_password }}@{{ rails_deploy_database_host }}:{{ rails_deploy_database_port }}/{{ rails_deploy_service }}_{{ rails_deploy_system_env }}?pool={{ rails_deploy_database_pool }}&timeout={{ rails_deploy_database_timeout }}"
+
+  # Application variables, they are used in the backend/worker variables below.
+  SERVICE: '{{ rails_deploy_service }}'
+  LOG_FILE: '{{ rails_deploy_log }}/{{ rails_deploy_service }}.log'
+  RUN_STATE_PATH: '{{ rails_deploy_run }}'
+
+  # Backend variables, they work in conjunction with the example
+  # server configs. Check docs/examples/rails/config/puma.rb|unicorn.rb.
+  LISTEN_ON: '{{ rails_deploy_backend_bind }}'
+
+  THREADS_MIN: 0
+  THREADS_MAX: 16
+  WORKERS: 2
+
+  # Background worker variables. Check docs/examples/rails/config/sidekiq.yml
+  # and initializers/sidekiq.rb on how use this in your application.
+  BACKGROUND_URL: '{{ rails_deploy_worker_url }}'
+  BACKGROUND_THREADS: '{{ rails_deploy_database_pool }}'
+
+rails_secret_key_base: "{{ lookup('password', secret + '/credentials/' + ansible_fqdn + '/SECRET_KEY_BASE length=64') }}"

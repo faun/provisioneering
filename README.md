@@ -84,7 +84,7 @@ AWS_SUBNET_ID='subnet-13241234'
 AWS_VPC_ZONES='us-east-1a'
 
 # Tag for instance identification
-ENVIRONMENT='staging'
+RAILS_ENVIRONMENT='staging'
 
 # Base ami image (Ubuntu 14.04 in this case)
 AMI_ID='ami-f21b7d9a'
@@ -93,7 +93,7 @@ AMI_ID='ami-f21b7d9a'
 Generate an AMI:
 
 ``` console
-BUILT_AMI=$(bin/generate_ami)
+BUILT_AMI=$(bin/generate_ami) || cat build.log
 ```
 
 Launch the resulting AMI as an EC2 instance
@@ -102,3 +102,33 @@ bin/launch_ami_image
 ```
 
 Enjoy your newly provisioned server with Docker and Fig pre-installed.
+
+# Provisioning with Ansible
+
+We are using the [debops](http://debops.org/) framework for provisioning servers.
+
+See the debops [documentation](http://docs.debops.org/en/latest/installation.html) for installation instructions.
+
+The tl;dr version:
+
+```
+sudo pip install debops
+debops-update
+```
+
+Store the password to the vault:
+
+```
+echo "[password redacted]" > ~/.vault_pass.txt
+```
+
+To run the debops playbooks with our custom playbooks, run:
+
+```
+bin/provision
+```
+
+Run only the playbooks tagged with rails\_deploy:
+```
+bin/provision -t rails_deploy 
+```

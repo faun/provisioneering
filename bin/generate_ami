@@ -3,9 +3,12 @@ set -e
 
 : ${AWS_ACCESS_KEY_ID:?"You must specify AWS_ACCESS_KEY_ID"}
 : ${AWS_SECRET_ACCESS_KEY:?"You must specify AWS_SECRET_ACCESS_KEY"}
+: ${AWS_SOURCE_AMI:?"You must specify AWS_SOURCE_AMI"}
 : ${AWS_SECURITY_GROUP_ID:?"You must specify AWS_SECURITY_GROUP_ID"}
-: ${IHAT_ENVIRONMENT:?"You must specify IHAT_ENVIRONMENT"}
+: ${RAILS_ENVIRONMENT:?"You must specify RAILS_ENVIRONMENT"}
 : ${AWS_INSTANCE_SIZE:?"You must specify AWS_INSTANCE_SIZE"}
+: ${AWS_VPC_ID:?"You must specify AWS_VPC_ID"}
+: ${AWS_SUBNET_ID:?"You must specify AWS_SUBNET_ID"}
 
 LOGFILE="build.log"
 OUT=$(mktemp /tmp/output.XXXXXXXXXX) || \
@@ -15,8 +18,11 @@ UUID=$(uuid -v4)
 PACKER_RESULT=$(packer build \
   -var aws_access_key=${AWS_ACCESS_KEY_ID} \
   -var aws_secret_key=${AWS_SECRET_ACCESS_KEY} \
-  -var environment=${IHAT_ENVIRONMENT} \
+  -var environment=${RAILS_ENVIRONMENT} \
+  -var aws_source_ami=${AWS_SOURCE_AMI} \
   -var security_group_id=${AWS_SECURITY_GROUP_ID} \
+  -var vpc_id=${AWS_VPC_ID} \
+  -var subnet_id=${AWS_SUBNET_ID} \
   -var aws_instance_size=${AWS_INSTANCE_SIZE} \
   -var build_uuid=${UUID} \
   aws.json > "${LOGFILE}" && echo 0 || echo $?)
