@@ -21,8 +21,13 @@
     - name: Source app defaults file from /etc/profile
       lineinfile: dest=/etc/profile 
                   line='. /etc/default/'{{ rails_deploy_service }}
-
   post_tasks:
+    - name: Add TEI package source
+      apt_repository: repo='deb http://tei.oucs.ox.ac.uk/teideb/binary ./' state=present
+    - name: Add TEI apt key
+      apt_key: keyserver=wwwkeys.uk.pgp.net id=FEA4973F86A9A497
+    - name: Install OxGarage from TEI repo
+      apt: name=tei-oxgarage update_cache=yes state=latest
     - name: Restart app services
       service: name={{ item }} state=restarted
       with_items:
