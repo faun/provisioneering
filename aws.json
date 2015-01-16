@@ -3,12 +3,12 @@
     "aws_access_key": "",
     "aws_secret_key": "",
     "aws_source_ami": "",
-    "environment": "",
     "security_group_id": "",
     "subnet_id": "",
     "vpc_id": "",
     "aws_instance_size": "",
-    "build_uuid": ""
+    "build_uuid": "",
+    "server_name": ""
   },
   "builders": [{
     "type": "amazon-ebs",
@@ -24,7 +24,7 @@
     "vpc_id": "{{user `vpc_id`}}",
     "tags": {
       "BuildUUID": "{{user `build_uuid`}}",
-      "Name": "iHat",
+      "Name": "{{user `server_name`}}",
       "OS": "Ubuntu",
       "Release": "14.04 LTS",
       "GeneratedAt": "{{isotime}}"
