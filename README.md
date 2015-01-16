@@ -89,6 +89,9 @@ AWS_SOURCE_AMI='ami-9eaa1cf6'
 # The tag name for your new EC2 instance
 SERVER_NAME="ihat-${RAILS_ENVIRONMENT}"
 
+# Your Github deploy token
+RAILS_DEPLOY_GIT_ACCESS_TOKEN='21342341234'
+
 ```
 
 Generate an AMI:
