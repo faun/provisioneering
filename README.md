@@ -16,7 +16,7 @@ Configure AWS CLI
   aws configure
 ```
 
-Follow the prompts. They will lead the way.
+Follow the prompts. They will lead the way. Make sure you select JSON as the output format.
 
 
 ---
