@@ -63,19 +63,19 @@ AWS_ACCESS_KEY_ID='YOUR-ACCESS_KEY'
 AWS_SECRET_ACCESS_KEY='YOUR_SECRET_ACCESS_KEY'
 
 # Define the security group for provisioning
-AWS_SECURITY_GROUP_ID='sg-abc123'
+AWS_SECURITY_GROUP_ID='sg-e4969181'
 
 # Launch instance SSH key
 AWS_KEY_NAME='ssh-key-name-identifier'
 
 # Define instance size
-AWS_INSTANCE_SIZE='t1.micro'
+AWS_INSTANCE_SIZE='t2.small'
 
 # VPC ID for launched instance
-AWS_VPC_ID='vpc-34567'
+AWS_VPC_ID='vpc-36a92853'
 
 # Launched instance subnet id
-AWS_SUBNET_ID='subnet-13241234'
+AWS_SUBNET_ID='subnet-6216b115'
 
 # Launched instance VPC zones
 AWS_VPC_ZONES='us-east-1a'
@@ -84,7 +84,7 @@ AWS_VPC_ZONES='us-east-1a'
 RAILS_ENVIRONMENT='staging'
 
 # Base ami image (Ubuntu 14.04 in this case)
-AMI_ID='ami-f21b7d9a'
+AWS_SOURCE_AMI='ami-9eaa1cf6'
 
 # The tag name for your new EC2 instance
 SERVER_NAME="ihat-${RAILS_ENVIRONMENT}"
