@@ -30,14 +30,5 @@
       "GeneratedAt": "{{isotime}}"
     }
   }],
-  "provisioners": [
-    {
-      "type": "shell",
-      "inline": "curl -sSL https://get.docker.com/ubuntu/ | sudo sh"
-    },
-    {
-      "type": "shell",
-      "inline": "sudo sh -c \"curl -L https://github.com/docker/fig/releases/download/1.0.1/fig-`uname -s`-`uname -m` > /usr/local/bin/fig\"; sudo chmod +x /usr/local/bin/fig"
-    }
-  ]
+  "provisioners": []
 }
