@@ -132,3 +132,10 @@ Run only the playbooks tagged with rails\_deploy:
 ```
 bin/provision -t rails_deploy 
 ```
+
+Or start at cloning the project's source code (for CI or if re-deploying code)
+
+```
+ bin/provision -t rails_deploy --start-at-task="Clone the app's source code"
+ ```
+
