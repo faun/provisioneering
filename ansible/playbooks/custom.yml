@@ -9,12 +9,6 @@
       SECRET_KEY_BASE: "{{ rails_secret_key_base }}"
 
   pre_tasks:
-    - name: "Change permissions for application source"
-      tags: 'ihat-staging'
-      file: path={{ rails_deploy_src }}
-            state=directory
-            owner={{ rails_deploy_service }}
-            recurse="yes"
     - name: Clone meTypeset repo
       git: repo=https://github.com/MartinPaulEve/meTypeset.git
            dest=/home/{{ rails_deploy_service }}/meTypeset
