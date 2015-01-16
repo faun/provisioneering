@@ -55,7 +55,7 @@ Create a user on AWS with the following IAM policy (or similar):
 }
 ```
 
-Define the following confuration variables:
+Define the following configuration variables:
 
 ``` console
 # The AWS access key with IAM to be able to provision
