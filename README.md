@@ -85,6 +85,10 @@ RAILS_ENVIRONMENT='staging'
 
 # Base ami image (Ubuntu 14.04 in this case)
 AMI_ID='ami-f21b7d9a'
+
+# The tag name for your new EC2 instance
+SERVER_NAME="ihat-${RAILS_ENVIRONMENT}"
+
 ```
 
 Generate an AMI:
