@@ -65,9 +65,6 @@ AWS_SECRET_ACCESS_KEY='YOUR_SECRET_ACCESS_KEY'
 # Define the security group for provisioning
 AWS_SECURITY_GROUP_ID='sg-abc123'
 
-# Security group for launched instance
-AWS_SECURITY_GROUP_IDS='sg-2345'
-
 # Launch instance SSH key
 AWS_KEY_NAME='ssh-key-name-identifier'
 
