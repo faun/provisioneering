@@ -143,3 +143,8 @@ Or start at cloning the project's source code (for CI or if re-deploying code)
  bin/provision -t rails_deploy --start-at-task="Clone the app's source code"
  ```
 
+To encrypted secrets for a server (ihat-staging in this case):
+
+```
+ansible-vault edit ansible/inventory/host_vars/ihat-staging.yml --vault-password-file ~/.vault_pass.txt
+```
